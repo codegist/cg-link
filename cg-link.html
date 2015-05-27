@@ -2,7 +2,7 @@
 <link href="../paper-shadow/paper-shadow.html" rel="import">
 <link href="../cg-base/cg-base.html" rel="import">
 
-<polymer-element name="cg-link" attributes="link display identifier type callback linkSource linkdata source clicked z" extends="cg-base">
+<polymer-element name="cg-link" attributes="link display identifier type callback nowrap linkSource linkdata source clicked z" extends="cg-base">
 <template>
     <style>
         :host {
@@ -20,12 +20,13 @@
             color: #6965FF;
         }
     </style>
-    <paper-shadow animated class="link" on-tap="{{_click}}" id="link">{{link.display || display}}</paper-shadow>
+    <paper-shadow animated class="link" on-tap="{{_click}}" id="link" style="{{nowrap?'white-space: nowrap;':''}}">{{link.display || display}}</paper-shadow>
 </template>
 <script>
     Polymer('cg-link', {
         listensTo:[],
         z:1,
+        nowrap:false,
         source:null,
         link:null,
         identifier:null,
