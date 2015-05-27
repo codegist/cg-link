@@ -2,7 +2,7 @@
 <link href="../paper-shadow/paper-shadow.html" rel="import">
 <link href="../cg-base/cg-base.html" rel="import">
 
-<polymer-element name="cg-link" attributes="link display identifier type callback linkdata source clicked z" extends="cg-base">
+<polymer-element name="cg-link" attributes="link display identifier type callback linkSource linkdata source clicked z" extends="cg-base">
 <template>
     <style>
         :host {
@@ -31,6 +31,7 @@
         identifier:null,
         type:null,
         linkdata:null,
+        linkSource:null,
         display:null,
         callback:null,
         _click:function(e){
@@ -42,6 +43,7 @@
                 id:id,
                 type:type,
                 data:this.linkdata,
+                linkSource:this.linkSource,
                 original:this.link,
                 callback:this.callbackWrapper
             });
