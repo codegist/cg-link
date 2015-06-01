@@ -1,64 +1,110 @@
 <link href="../polymer/polymer.html" rel="import">
-<link href="../paper-shadow/paper-shadow.html" rel="import">
-<link href="../cg-base/cg-base.html" rel="import">
+<link href="../paper-material/paper-material.html" rel="import">
+<link href="../cg-base/cg-base-behavior.html" rel="import">
 
-<polymer-element name="cg-link" attributes="link display identifier type callback nowrap linkSource linkdata source clicked z" extends="cg-base">
+<dom-module id="cg-link">
+<style>
+    :host {
+        display: inline;
+        font-family: sans-serif;
+    }
+    :host .link {
+        cursor:pointer;
+        font-size: 12px;
+        padding: 4px;
+        margin: 0px 5px;
+        display: inline-block;
+        background-color: white;
+        border-radius:5px;
+        color: #6965FF;
+    }
+    :host(nowrap) .link {
+        white-space: nowrap
+    }
+</style>
 <template>
-    <style>
-        :host {
-            display: inline;
-            font-family: sans-serif;
-        }
-        :host .link {
-            cursor:pointer;
-            font-size: 12px;
-            padding: 4px;
-            margin: 0px 5px;
-            display: inline-block;
-            background-color: white;
-            border-radius:5px;
-            color: #6965FF;
-        }
-    </style>
-    <paper-shadow animated class="link" on-tap="{{_click}}" id="link" style="{{nowrap?'white-space: nowrap;':''}}">{{link.display || display}}</paper-shadow>
+    <paper-material animated class="link" on-tap="_click" id="link" elevation="[[z]]"><span>[[showLink.display]]</span></paper-material>
 </template>
+</dom-module>
 <script>
-    Polymer('cg-link', {
-        listensTo:[],
-        z:1,
-        nowrap:false,
-        source:null,
-        link:null,
-        identifier:null,
-        type:null,
-        linkdata:null,
-        linkSource:null,
-        display:null,
-        callback:null,
+    Polymer({
+        is:'cg-link',
+        properties:{
+            listensTo:{
+                type:Array,
+                value:[]
+            },
+            z:{
+                type:Number,
+                value:1,
+            },
+            nowrap:{
+                type:Boolean,
+                value:false,
+                reflectToAttribute:true
+            },
+            link:{
+                type:Object,
+                value:null
+            },
+            identifier:{
+                type:Object,
+                value:null
+            },
+            type:{
+                type:String,
+                value:null
+            },
+            display:{
+                type:String,
+                value:null
+            },
+            source:Object,
+            linkdata:Object,
+            linkSource:Object,
+            callback:{
+                type:Function,
+                value:function(){return function(){}}
+            },
+            clicked:{
+                type:Function,
+                value:function(){
+                    return this._clicked;
+                }
+
+            },
+            showLink:{
+                type:Object,
+                computed:'buildLink(link, display, identifier, type)'
+            }
+        },
+        behaviors:[CG.BaseBehavior],
+        buildLink:function(link, display, identifier, type){
+            var link = this.link || {
+                                        display:display,
+                                        id:identifier,
+                                        type:type,
+                                    };
+            return link;
+        },
         _click:function(e){
             e.stopPropagation();
-            var id = this.link ? this.link.id : this.identifier;
-            var type = this.link ? this.link.type : this.type;
-            console.log("[cg-link] firing link clicked (type:"+type+", id:"+id+")");
+            console.log("[cg-link] firing link clicked (type:"+this.showLink.type+", id:"+this.showLink.id+")");
             this.clicked.call(this.source || this, e, {
-                id:id,
-                type:type,
+                id:this.showLink.id,
+                type:this.showLink.type,
                 data:this.linkdata,
                 linkSource:this.linkSource,
                 original:this.link,
                 callback:this.callbackWrapper
             });
         },
-        zChanged:function(){
-            this.$.link.setZ(this.z);
-        },
-        clicked:function(e, detail){
+        _clicked:function(e, detail){
             this.fireApplicationLink(detail.type, detail, this.source);
         },
         callbackWrapper:function(response){
             console.log("[cg-link] Receiving link response (type:"+this.type+", subtype:"+this.subtype+", id:"+this.id+")");
-            this.callback(response, this.link ? this.link.id : this.identifier, this.link ? this.link.type : this.type);
+            this.callback(response, this.showLink.id, this.showLink.type);
         }
     });
 </script>
-</polymer-element>
