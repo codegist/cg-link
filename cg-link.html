@@ -1,7 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-styles/paper-styles.html">
 <link rel="import" href="../paper-material/paper-material.html">
-<link rel="import" href="../cg-base/cg-base-behavior.html">
+<link rel="import" href="../cg-behaviors/cg-base-behavior.html">
+<link rel="import" href="../cg-behaviors/cg-application-link-behavior.html">
 
 <dom-module id="cg-link">
 <style>
@@ -19,7 +20,7 @@
         border-radius:5px;
         color: #6965FF;
     }
-    :host(nowrap) .link {
+    :host([nowrap]) .link {
         white-space: nowrap
     }
 </style>
@@ -31,9 +32,6 @@
     Polymer({
         is:'cg-link',
         properties:{
-            listensTo:{
-                value:[]
-            },
             z:{
                 type:Number,
                 value:1,
@@ -78,7 +76,7 @@
                 computed:'buildLink(link, display, identifier, type)'
             }
         },
-        behaviors:[CG.BaseBehavior],
+        behaviors:[CG.BaseBehavior, CG.ApplicationLinkBehavior],
         buildLink:function(link, display, identifier, type){
             var link = this.link || {
                                         display:display,
@@ -89,8 +87,8 @@
         },
         _click:function(e){
             e.stopPropagation();
-            console.log("[cg-link] firing link clicked (type:"+this.showLink.type+", id:"+this.showLink.id+")");
-            this.clicked.call(this.source || this, e, {
+            console.log(this.toString(), "firing link clicked (type:"+this.showLink.type+", id:"+this.showLink.id+")");
+            this.clicked(e, {
                 id:this.showLink.id,
                 type:this.showLink.type,
                 data:this.linkdata,
@@ -103,7 +101,7 @@
             this.fireApplicationLink(detail.type, detail, this.source);
         },
         callbackWrapper:function(response){
-            console.log("[cg-link] Receiving link response (type:"+this.type+", subtype:"+this.subtype+", id:"+this.id+")");
+            console.log(this.toString(), "Receiving link response (type:"+this.type+", subtype:"+this.subtype+", id:"+this.id+")");
             this.callback(response, this.showLink.id, this.showLink.type);
         }
     });
