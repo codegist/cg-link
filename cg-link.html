@@ -2,7 +2,6 @@
 <link rel="import" href="../paper-styles/paper-styles.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../cg-behaviors/cg-base-behavior.html">
-<link rel="import" href="../cg-behaviors/cg-application-link-behavior.html">
 
 <dom-module id="cg-link">
 <style>
@@ -76,7 +75,7 @@
                 computed:'buildLink(link, display, identifier, type)'
             }
         },
-        behaviors:[CG.BaseBehavior, CG.ApplicationLinkBehavior],
+        behaviors:[CG.BaseBehavior],
         buildLink:function(link, display, identifier, type){
             var link = this.link || {
                                         display:display,
