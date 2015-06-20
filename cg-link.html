@@ -86,7 +86,7 @@
         },
         _click:function(e){
             e.stopPropagation();
-            console.log(this.toString(), "firing link clicked (type:"+this.showLink.type+", id:"+this.showLink.id+")");
+            console.log(this.toString(), "firing link clicked (type:",this.showLink.type,", id:",this.showLink.id,")");
             this.clicked(e, {
                 id:this.showLink.id,
                 type:this.showLink.type,
@@ -100,7 +100,7 @@
             this.fireApplicationLink(detail.type, detail, this.source);
         },
         callbackWrapper:function(response){
-            console.log(this.toString(), "Receiving link response (type:"+this.type+", subtype:"+this.subtype+", id:"+this.id+")");
+            console.log(this.toString(), "Receiving link response (type:",this.type,", subtype:",this.subtype,", id:",this.id,")");
             this.callback(response, this.showLink.id, this.showLink.type);
         }
     });
