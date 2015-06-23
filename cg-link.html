@@ -76,6 +76,9 @@
             }
         },
         behaviors:[CG.BaseBehavior],
+        listeners:{
+            "click":"cancelEvent",
+        },
         buildLink:function(link, display, identifier, type){
             var link = this.link || {
                                         display:display,
@@ -86,6 +89,7 @@
         },
         _click:function(e){
             e.stopPropagation();
+            e.preventDefault();
             console.log(this.toString(), "firing link clicked (type:",this.showLink.type,", id:",this.showLink.id,")");
             this.clicked(e, {
                 id:this.showLink.id,
